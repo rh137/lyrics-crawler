@@ -10,6 +10,7 @@ KKBOX_DOMAIN_NAME = 'https://www.kkbox.com'
 def check(name1, name2):
 	return name1 in name2 or name2 in name1
 
+
 def kkbox_search(searching_album_name='房間裡的大象', searching_artist_name='持修'):
 	'''Given album name and artist name, return candidate albums'''
 	url =  'https://www.kkbox.com/tw/tc/search.php?'
@@ -30,8 +31,9 @@ def kkbox_search(searching_album_name='房間裡的大象', searching_artist_nam
 
 	return ret
 
+
 def crawl_songs(album):
-	'''Given album, return song names and links in the album'''
+	'''crawl songs into a given Album object'''
 	r = rq.get(album.link)
 	soup = bs(r.text, 'html.parser')
 	songs = soup.find_all('tr', class_='song-item')
@@ -42,8 +44,22 @@ def crawl_songs(album):
 		album.songs.append(Song(song_name, song_link)) 
 
 
+def crawl_lyrics(song):
+	'''crawl lyrics into a given Song object; store the lyrics as files'''
+	r = rq.get(song.link)
+	s = bs(r.text, 'html.parser')
+	lyrics = s.find('p', class_='lyrics').text
+	song.lyrics = lyrics
+
+	# TODO: store the lyrics as files
+
+
+
 result = kkbox_search('')
 print(result)
 
 crawl_songs(result[0])
 print(result[0].songs)
+
+crawl_lyrics(result[0].songs[0])
+print(result[0].songs[0].lyrics)
