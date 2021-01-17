@@ -1,4 +1,4 @@
-# Lyric Crawler
+# Lyrics Crawler
 Crawls lyrics from KKBOX
 
 # Goal
