@@ -41,7 +41,7 @@ def crawl_songs(album):
 		song_title_a = s.find('a', class_='song-title')
 		song_name = song_title_a.text.strip()
 		song_link = KKBOX_DOMAIN_NAME + song_title_a['href']
-		album.songs.append(Song(song_name, song_link)) 
+		album.songs.append(Song(album._title, album._artist, song_name, song_link)) 
 
 
 def crawl_lyrics(song):
@@ -50,9 +50,7 @@ def crawl_lyrics(song):
 	s = bs(r.text, 'html.parser')
 	lyrics = s.find('p', class_='lyrics').text
 	song.lyrics = lyrics
-
-	# TODO: store the lyrics as files
-
+	song.store_lyrics()
 
 
 result = kkbox_search('')
@@ -61,5 +59,5 @@ print(result)
 crawl_songs(result[0])
 print(result[0].songs)
 
-crawl_lyrics(result[0].songs[0])
-print(result[0].songs[0].lyrics)
+for s in result[0].songs:
+	crawl_lyrics(s)
