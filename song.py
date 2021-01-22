@@ -1,15 +1,19 @@
+import os
+
 class Song:
 	def __init__(self, album, artist, title, link):
-		self._album = album
-		self._artist = artist
-		self._title = title
+		self.__album = album
+		self.__artist = artist
+		self.__title = title
 		self.link = link
 		self.lyrics = ''
 	
-	def info(self):
-		return {'album':	self._album,
-				'artist':	self._artist,
-				'title':	self._title,}
-	
+	def store_lyrics(self):
+		file_name = './lyrics/' + str(self)
+		print(file_name)
+		if not os.path.isfile(file_name):
+			with open(file_name, 'w') as f:
+				f.write(self.lyrics)
+
 	def __repr__(self):
-		return self._title
+		return f'{self.__title}_{self.__artist}_{self.__album}'
