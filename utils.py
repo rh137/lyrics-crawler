@@ -57,6 +57,8 @@ def kkbox_search(searching_album_name='房間裡的大象', searching_artist_nam
 		album_link = KKBOX_DOMAIN_NAME + _.h3.a['href']
 		album_name = _.h3.a.text.strip()
 		artist_name = _.find('span', class_='name').text.strip()
+		
+		if '搶先聽' in album_name: continue
 
 		if  _check(album_name, searching_album_name)\
 			and _check(artist_name, searching_artist_name):
@@ -92,11 +94,12 @@ def crawl_lyrics(song):
 
 
 if __name__ == '__main__':
-	result = kkbox_search('Kind of True', '福爾摩沙任務爵士樂團 Mission Formosa')
+	result = kkbox_search('失物之城', '許哲珮')
 	print(result)
+	
+	if len(result) == 1:
+		crawl_songs(result[0])
+		print(result[0].songs)
 
-	crawl_songs(result[0])
-	print(result[0].songs)
-
-	for s in result[0].songs:
-		crawl_lyrics(s)
+		for s in result[0].songs:
+			crawl_lyrics(s)
