@@ -1,19 +1,52 @@
 import requests as rq
 from bs4 import BeautifulSoup as bs
+import re
 
-from album import Album
-from song import Song
+import album
+import song
 
 
 KKBOX_DOMAIN_NAME = 'https://www.kkbox.com'
 
-def check(name1, name2):
-	return name1 in name2 or name2 in name1
+
+Thesaurus = {
+	"蘇聖育Organ 3樂團": "Shen Yu Su",
+	"JSheon": "J.Sheon",
+	"熊仔 & 豹子膽": "熊仔&豹子膽",
+	"LEO37 & SOSS": "LEO37+SOSS",
+	"焦安溥": "張懸",
+	"福爾摩沙任務爵士樂團 Mission Formosa": "福爾摩沙任務爵士樂團",
+	"舒米恩．魯碧": "舒米恩",
+	"Miss Ko 葛仲珊": "葛仲珊",
+	"阿洛˙卡力亭˙巴奇辣": "Ado",
+	"陳修澤": "那我懂你意思了",	
+	"袁興緯": "",
+	}
+
+
+
+def _check(name1, name2):
+	n1, n2 = name1.lower().replace(' ', ''), name2.lower().replace(' ', '')
+	if n1 in n2 or n2 in n1: return True
+	n2 = name2.lower().replace(' & ', '與').replace(' ', '')
+	if n1 in n2 or n2 in n1: return True
+	n1 = ''.join(re.split('\W|_', n1))
+	n2 = ''.join(re.split('\W|_', n2))
+	if n1 in n2 or n2 in n1: return True
+	if name2 in Thesaurus.keys():
+		n2_ = Thesaurus[name2].lower()
+		print(name1, name2, n2_)
+		if n1 in n2_ or n2_ in n1:
+			print('n1')
+			return True
+	return False
 
 
 def kkbox_search(searching_album_name='房間裡的大象', searching_artist_name='持修'):
 	'''Given album name and artist name, return candidate albums'''
 	url =  'https://www.kkbox.com/tw/tc/search.php?'
+	if searching_artist_name in Thesaurus.keys():
+		searching_artist_name = Thesaurus[searching_artist_name]
 	params = {	'word': 	f'{searching_album_name}+{searching_artist_name}',
 				'search':	 'album'						}
 	r = rq.get(url, params=params)
@@ -25,9 +58,9 @@ def kkbox_search(searching_album_name='房間裡的大象', searching_artist_nam
 		album_name = _.h3.a.text.strip()
 		artist_name = _.find('span', class_='name').text.strip()
 
-		if  check(album_name, searching_album_name)\
-			and check(artist_name, searching_artist_name):
-			ret.append(Album(album_name, artist_name, album_link))
+		if  _check(album_name, searching_album_name)\
+			and _check(artist_name, searching_artist_name):
+			ret.append(album.Album(album_name, artist_name, album_link))
 
 	return ret
 
@@ -41,23 +74,29 @@ def crawl_songs(album):
 		song_title_a = s.find('a', class_='song-title')
 		song_name = song_title_a.text.strip()
 		song_link = KKBOX_DOMAIN_NAME + song_title_a['href']
-		album.songs.append(Song(album._title, album._artist, song_name, song_link)) 
+		album.songs.append(song.Song(album.title(), album.artist(), song_name, song_link)) 
 
 
 def crawl_lyrics(song):
 	'''crawl lyrics into a given Song object; store the lyrics as files'''
 	r = rq.get(song.link)
 	s = bs(r.text, 'html.parser')
-	lyrics = s.find('p', class_='lyrics').text
+	try:
+		lyrics = s.find('p', class_='lyrics').text
+	except:
+		lyrics = ''
 	song.lyrics = lyrics
 	song.store_lyrics()
 
 
-result = kkbox_search('')
-print(result)
 
-crawl_songs(result[0])
-print(result[0].songs)
 
-for s in result[0].songs:
-	crawl_lyrics(s)
+if __name__ == '__main__':
+	result = kkbox_search('Kind of True', '福爾摩沙任務爵士樂團 Mission Formosa')
+	print(result)
+
+	crawl_songs(result[0])
+	print(result[0].songs)
+
+	for s in result[0].songs:
+		crawl_lyrics(s)
