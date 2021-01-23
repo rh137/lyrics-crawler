@@ -5,7 +5,7 @@ Crawls lyrics from KKBOX
 From list of albums and corresponding artists, find the song names and lyrics in the album.
 
 # Sub-tasks
-- [ ] 1. read data, get album name and artist name.
+- [x] 1. read data, get album name and artist name.
 - [x] 2. search on KKBOX for the album; For each result, return album name, artist name, and album link.
 - [x] 3. check which result is needed by returned album name and artist name.
 - [x] 4. from the album link, crawl the song names (and links) in the album.
