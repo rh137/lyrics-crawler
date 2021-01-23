@@ -9,11 +9,14 @@ class Song:
 		self.lyrics = ''
 	
 	def store_lyrics(self):
-		file_name = './lyrics/' + str(self)
+		file_name = './lyrics/' + str(self).replace('/', '[slash]')
 		print(file_name)
 		if not os.path.isfile(file_name):
 			with open(file_name, 'w') as f:
 				f.write(self.lyrics)
+	
+	def title(self):
+		return self.__title
 
 	def __repr__(self):
 		return f'{self.__title}_{self.__artist}_{self.__album}'
