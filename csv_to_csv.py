@@ -27,22 +27,19 @@ def csv_to_csv(input_='./data/raw_data.csv', output='./data/output.csv'):
 			album_name = row[4]
 			artist_name = row[6]
 			
+		
 			if (album_name, artist_name) not in my_dict.keys():
-				my_dict[(album_name, artist_name)] = kkbox_search(album_name, artist_name)
+				my_dict[(album_name, artist_name)] = search(album_name, artist_name)
 			candidates = my_dict[(album_name, artist_name)]	
-			'''
-			if len(candidates) == 0:
-				print(f'{i+1}: {album_name}-{artist_name}')
-				cnt0 += 1
-				lst0.append((album_name, artist_name))
-			'''
+				
+
 			if len(candidates) == 1:
 				album = candidates[0]
 				crawl_songs(album)
 				for s in album.songs:
 					row[5] = s.title()
 					writer.writerow(row)
-					#crawl_lyrics(s)
+					crawl_lyrics(s)
 			else:
 				row[-1] = len(candidates)
 				writer.writerow(row)

@@ -17,6 +17,10 @@ class Song:
 	
 	def title(self):
 		return self.__title
+	
+	def from_(self):
+		if 'kkbox' in self.link: return 'kkbox'
+		if 'mojim' in self.link: return 'mojim'
 
 	def __repr__(self):
 		return f'{self.__title}_{self.__artist}_{self.__album}'

@@ -68,7 +68,7 @@ def kkbox_search(searching_album_name='房間裡的大象', searching_artist_nam
 	return ret
 
 
-def crawl_songs(album):
+def kkbox_crawl_songs(album):
 	'''crawl songs into a given Album object'''
 	r = rq.get(album.link)
 	soup = bs(r.text, 'html.parser')
@@ -80,7 +80,7 @@ def crawl_songs(album):
 		album.songs.append(song_class.Song(album.title(), album.artist(), song_name, song_link)) 
 
 
-def crawl_lyrics(song):
+def kkbox_crawl_lyrics(song):
 	'''crawl lyrics into a given Song object; store the lyrics as files'''
 	r = rq.get(song.link)
 	s = bs(r.text, 'html.parser')
