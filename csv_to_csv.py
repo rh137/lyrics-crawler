@@ -38,6 +38,7 @@ def csv_to_csv(input_='./data/raw_data.csv', output='./data/output.csv'):
 				crawl_songs(album)
 				for s in album.songs:
 					row[5] = s.title()
+					row.append(s.link)
 					writer.writerow(row)
 					crawl_lyrics(s)
 			else:
