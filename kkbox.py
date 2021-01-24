@@ -89,7 +89,6 @@ def kkbox_crawl_lyrics(song):
 	except:
 		lyrics = ''
 	song.lyrics = lyrics
-	song.store_lyrics()
 
 
 

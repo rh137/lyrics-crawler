@@ -70,7 +70,6 @@ def mojim_crawl_lyrics(song):
 						if '更多更詳盡歌詞' not in line
 						and '魔鏡歌詞網' not in line])
 	song.lyrics = lyrics
-	song.store_lyrics()
 
 
 if __name__ == '__main__':
