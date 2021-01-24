@@ -2,8 +2,8 @@ import requests as rq
 from bs4 import BeautifulSoup as bs
 import re
 
-import album
-import song
+import album_class
+import song_class
 
 
 KKBOX_DOMAIN_NAME = 'https://www.kkbox.com'
@@ -63,7 +63,7 @@ def kkbox_search(searching_album_name='房間裡的大象', searching_artist_nam
 
 		if  _check(album_name, searching_album_name)\
 			and _check(artist_name, searching_artist_name):
-			ret.append(album.Album(album_name, artist_name, album_link))
+			ret.append(album_class.Album(album_name, artist_name, album_link))
 
 	return ret
 
@@ -77,7 +77,7 @@ def crawl_songs(album):
 		song_title_a = s.find('a', class_='song-title')
 		song_name = song_title_a.text.strip()
 		song_link = KKBOX_DOMAIN_NAME + song_title_a['href']
-		album.songs.append(song.Song(album.title(), album.artist(), song_name, song_link)) 
+		album.songs.append(song_class.Song(album.title(), album.artist(), song_name, song_link)) 
 
 
 def crawl_lyrics(song):
