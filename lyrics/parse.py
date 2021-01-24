@@ -2,9 +2,10 @@ import os
 
 if __name__ == '__main__':
 	file_names = os.listdir()
+	print(len(file_names))
 	for name in file_names:
 		if '.py' in name or os.path.isdir(name): continue
-		with open(name, 'r') as f, open(f'./processed/{name}.txt', 'w') as fout:
+		with open(name, 'r') as f, open(f'./processed/{name}', 'w') as fout:
 			for line in f:
 				if  '作詞：' in line or '作曲：' in line\
 					or '編曲：' in line or '詞/曲：' in line\
