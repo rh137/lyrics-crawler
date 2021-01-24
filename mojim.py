@@ -57,13 +57,24 @@ def mojim_crawl_songs(album):
 			else:
 				song_name = song.text.strip()
 				song_link = MOJIM_DOMAIN_NAME[:-1] + song['href']
-				print(song_name, song_link, flush=True)
-
 				album.songs.append(song_class.Song(album.title(), album.artist(), song_name, song_link))
-				
+
+
+def mojim_crawl_lyrics(song):
+	r = rq.get(song.link)
+	s = bs(r.text, 'html.parser')
+	c = s.find('dd', {"id": "fsZx3"})
+	#for br in c.find_all('br'): br.replace_with('\n')
+	raw_lyrics = c.get_text('\n').split('\n')
+	lyrics = '\n'.join([line for line in raw_lyrics
+						if '更多更詳盡歌詞' not in line
+						and '魔鏡歌詞網' not in line])
+	song.lyrics = lyrics
+	song.store_lyrics()
 
 
 if __name__ == '__main__':
 	ret = mojim_search('藍寶石', '濁水溪公社')
 	mojim_crawl_songs(ret[0])
-	print(ret[0].songs)
+	mojim_crawl_lyrics(ret[0].songs[1])
+
