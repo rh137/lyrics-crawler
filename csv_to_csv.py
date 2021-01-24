@@ -33,16 +33,17 @@ def csv_to_csv(input_='./data/raw_data.csv', output='./data/output.csv'):
 			candidates = my_dict[(album_name, artist_name)]	
 				
 
+			# row[-1]: source, row[-2]: occurence
 			if len(candidates) == 1:
 				album = candidates[0]
 				crawl_songs(album)
 				for s in album.songs:
 					row[5] = s.title()
-					row.append(s.link)
+					row[-1] = s.link
 					writer.writerow(row)
 					crawl_lyrics(s)
 			else:
-				row[-1] = len(candidates)
+				row[-2] = len(candidates)
 				writer.writerow(row)
 				if len(candidates) > 1:
 					for album in candidates:
