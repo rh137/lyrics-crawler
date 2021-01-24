@@ -42,7 +42,7 @@ def csv_to_csv(input_='./data/raw_data.csv', output='./data/output.csv'):
 					row[-2] = s.link
 
 					crawl_lyrics(s)
-					row[-3] = s.store_lyrics()
+					row[-1] = s.store_lyrics()
 					writer.writerow(row)
 			else:
 				row[-3] = len(candidates)
