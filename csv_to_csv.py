@@ -20,8 +20,6 @@ def csv_to_csv(input_='./data/raw_data.csv', output='./data/output.csv'):
 		wm.writerow(header)
 
 		# album_name: row[4], song_name: row[5], artist: row[6]
-		cnt0, cnt1up = 0, 0
-		lst0 = []
 		for i in tqdm(range(1, len(raw_data))):
 			row = raw_data[i]
 			album_name = row[4]
@@ -54,4 +52,5 @@ def csv_to_csv(input_='./data/raw_data.csv', output='./data/output.csv'):
 				else:
 					w0.writerow(row)
 
-csv_to_csv()
+if __name__ == '__main__':
+	csv_to_csv()
