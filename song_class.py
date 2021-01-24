@@ -14,6 +14,7 @@ class Song:
 		if not os.path.isfile(file_name):
 			with open(file_name, 'w') as f:
 				f.write(self.lyrics)
+		return file_name
 	
 	def title(self):
 		return self.__title
