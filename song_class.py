@@ -9,7 +9,7 @@ class Song:
 		self.lyrics = ''
 	
 	def store_lyrics(self):
-		file_name = './lyrics/' + str(self).replace('/', '[slash]')
+		file_name = './lyrics/' + str(self).replace('/', '[slash]') + '.txt'
 		print(file_name)
 		if not os.path.isfile(file_name):
 			with open(file_name, 'w') as f:
